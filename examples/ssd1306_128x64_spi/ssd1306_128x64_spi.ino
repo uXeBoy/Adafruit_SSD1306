@@ -21,20 +21,20 @@ All text above, and the splash screen must be included in any redistribution
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-// If using software SPI (the default case):
+/* If using software SPI (the default case):
 #define OLED_MOSI   9
 #define OLED_CLK   10
 #define OLED_DC    11
 #define OLED_CS    12
 #define OLED_RESET 13
 Adafruit_SSD1306 display(OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
-
-/* Uncomment this block to use hardware SPI
-#define OLED_DC     6
-#define OLED_CS     7
-#define OLED_RESET  8
-Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
 */
+
+// Uncomment this block to use hardware SPI
+#define OLED_DC     4
+#define OLED_CS     12
+#define OLED_RESET  6
+Adafruit_SSD1306 display(OLED_DC, OLED_RESET, OLED_CS);
 
 #define NUMFLAKES 10
 #define XPOS 0
@@ -143,9 +143,9 @@ void setup()   {
   display.clearDisplay();
 
   // draw scrolling text
-  testscrolltext();
-  delay(2000);
-  display.clearDisplay();
+  // testscrolltext();
+  // delay(2000);
+  // display.clearDisplay();
 
   // text display tests
   display.setTextSize(1);
@@ -344,6 +344,7 @@ void testdrawline() {
   delay(250);
 }
 
+/*
 void testscrolltext(void) {
   display.setTextSize(2);
   display.setTextColor(WHITE);
@@ -366,3 +367,4 @@ void testscrolltext(void) {
   delay(2000);
   display.stopscroll();
 }
+*/
