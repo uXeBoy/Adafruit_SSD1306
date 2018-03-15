@@ -174,6 +174,7 @@ void Adafruit_SSD1306::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   if (sid != -1){
     pinMode(dc, OUTPUT);
     pinMode(cs, OUTPUT);
+    digitalWrite(cs, LOW);
 #ifdef HAVE_PORTREG
     csport      = portOutputRegister(digitalPinToPort(cs));
     cspinmask   = digitalPinToBitMask(cs);
@@ -287,12 +288,13 @@ void Adafruit_SSD1306::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
   ssd1306_command(SSD1306_DISPLAYON);//--turn on oled panel
 }
 
-
 void Adafruit_SSD1306::invertDisplay(uint8_t i) {
   if (i) {
-    ssd1306_command(SSD1306_INVERTDISPLAY);
+    digitalWrite(cs, HIGH);
+    // ssd1306_command(SSD1306_INVERTDISPLAY);
   } else {
-    ssd1306_command(SSD1306_NORMALDISPLAY);
+    digitalWrite(cs, LOW);
+    // ssd1306_command(SSD1306_NORMALDISPLAY);
   }
 }
 
@@ -301,19 +303,19 @@ void Adafruit_SSD1306::ssd1306_command(uint8_t c) {
   {
     // SPI
 #ifdef HAVE_PORTREG
-    *csport |= cspinmask;
+    // *csport |= cspinmask;
     *dcport &= ~dcpinmask;
-    *csport &= ~cspinmask;
+    // *csport &= ~cspinmask;
 #else
-    digitalWrite(cs, HIGH);
+    // digitalWrite(cs, HIGH);
     digitalWrite(dc, LOW);
-    digitalWrite(cs, LOW);
+    // digitalWrite(cs, LOW);
 #endif
     fastSPIwrite(c);
 #ifdef HAVE_PORTREG
-    *csport |= cspinmask;
+    // *csport |= cspinmask;
 #else
-    digitalWrite(cs, HIGH);
+    // digitalWrite(cs, HIGH);
 #endif
   }
   else
@@ -327,6 +329,7 @@ void Adafruit_SSD1306::ssd1306_command(uint8_t c) {
   }
 }
 
+/*
 // startscrollright
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
@@ -415,6 +418,7 @@ void Adafruit_SSD1306::dim(boolean dim) {
   ssd1306_command(SSD1306_SETCONTRAST);
   ssd1306_command(contrast);
 }
+*/
 
 void Adafruit_SSD1306::display(void) {
   ssd1306_command(SSD1306_COLUMNADDR);
@@ -437,22 +441,22 @@ void Adafruit_SSD1306::display(void) {
   {
     // SPI
 #ifdef HAVE_PORTREG
-    *csport |= cspinmask;
+    // *csport |= cspinmask;
     *dcport |= dcpinmask;
-    *csport &= ~cspinmask;
+    // *csport &= ~cspinmask;
 #else
-    digitalWrite(cs, HIGH);
+    // digitalWrite(cs, HIGH);
     digitalWrite(dc, HIGH);
-    digitalWrite(cs, LOW);
+    // digitalWrite(cs, LOW);
 #endif
 
     for (uint16_t i=0; i<(SSD1306_LCDWIDTH*SSD1306_LCDHEIGHT/8); i++) {
       fastSPIwrite(buffer[i]);
     }
 #ifdef HAVE_PORTREG
-    *csport |= cspinmask;
+    // *csport |= cspinmask;
 #else
-    digitalWrite(cs, HIGH);
+    // digitalWrite(cs, HIGH);
 #endif
   }
   else
